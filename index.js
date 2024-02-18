@@ -7,6 +7,7 @@ const port = 3000
 
 app.get('/', (req, res)=>{
     res.send('Home')
+    res.send('Hello Express in Backend Service')
 })
 
 app.get('/store', (req, res)=>{
