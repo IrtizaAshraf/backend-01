@@ -1,23 +1,84 @@
 // console.log("hello world in the Backend");
 
+// const express = require('express')
+// const app = express()
+// const port = 3000
+
+
+// app.get('/', (req, res)=>{
+//     res.send(`Home +
+//      Hello Express the world in backend Service`)
+   
+// })
+
+// app.get('/store', (req, res)=>{
+//     res.send('Store')
+// })
+// app.get('/store/product', (req, res)=>{
+//     res.send('Products')
+// })
+
+// app.listen(port,()=>{
+//     console.log(`hellow ${port}`);
+// })
+
+
+
 const express = require('express')
 const app = express()
 const port = 3000
 
 
-app.get('/', (req, res)=>{
-    res.send(`Home +
-     Hello Express the world in backend Service`)
-   
+//middleware
+app.use(express.json());
+
+
+const arr = [];
+
+app.get('/', (req, res) => {
+    res.send('Hello World!')
 })
 
-app.get('/store', (req, res)=>{
-    res.send('Store')
-})
-app.get('/store/product', (req, res)=>{
-    res.send('Products')
+//get all users
+app.get('/api/v1/users', (req, res) => {
+    res.send(arr)
 })
 
-app.listen(port,()=>{
-    console.log(`hellow ${port}`);
+//add user
+app.post('/api/v1/users', (req, res) => {
+    const { title } = req.body;
+    arr.push({
+        title: title,
+        id: Date.now(),
+    })
+    res.send('user added successfully');
+})
+
+//delete user
+app.delete('/api/v1/users/:id', (req, res) => {
+    const { id } = req.params
+    const index = arr.findIndex((user) => user.id === Number(id));
+    if (index === -1) {
+        res.send('user not found');
+        return
+    }
+    arr.splice(index, 1);
+    res.send('user deleted');
+})
+
+//edit user
+app.put('/api/v1/users/:id', (req, res) => {
+    const { title } = req.body;
+    const { id } = req.params;
+    const index = arr.findIndex((user) => user.id === Number(id));
+    if (index === -1) {
+        res.send('user not found');
+        return
+    }
+    arr[index].title = title
+    res.send('user edited successfully')
+})
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
 })
